@@ -1,0 +1,14 @@
+.header .header-box {
+  padding: 0 40px;
+  box-sizing: border-box;
+  text-align: right;
+}
+
+.header .header-box span {
+  margin-left: 10px;
+}
+
+.header .header-box span:nth-of-type(3) {
+  margin-left: 40px;
+  cursor: pointer;
+}

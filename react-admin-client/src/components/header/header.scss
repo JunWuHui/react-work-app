@@ -1,0 +1,16 @@
+.header {
+  .header-box {
+    padding: 0 40px;
+    box-sizing: border-box;
+    text-align: right;
+
+    span {
+      margin-left: 10px;
+    }
+
+    span:nth-of-type(3) {
+      margin-left: 40px;
+      cursor: pointer;
+    }
+  }
+}
