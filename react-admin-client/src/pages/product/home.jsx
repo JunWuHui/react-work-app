@@ -177,6 +177,7 @@ export default class ProductHome extends Component {
             locale={locale}
             loading={loading}
             pagination={{
+              current: this.pageNum,
               total,
               defaultPageSize: PAGE_SIZE,
               showQuickJumper: true,

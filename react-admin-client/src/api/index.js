@@ -64,6 +64,24 @@ export const reqUpdateProductStatus = (productId, status) => ajax('/manage/produ
 export const reqDeleteImg = (name) => ajax('/manage/img/delete', {
   name
 }, 'post')
+
+// 添加角色
+export const reqAddRole = (roleName) => ajax('/manage/role/add', {
+  roleName
+}, 'POST')
+// 获取角色列表
+export const reqRoles = () => ajax('/manage/role/list')
+// 更新角色(给角色设置权限)
+export const reqUpdateRole = (role) => ajax('/manage/role/update', role, 'POST')
+
+// 添加/更新用户
+export const reqAddOrUpdateUser = (user) => ajax('/manage/user/' + (user._id ? 'update' : 'add'), user, 'POST')
+// 获取用户列表
+export const reqUsers = () => ajax('/manage/user/list')
+// 删除用户
+export const reqDeleteUser = (userId) => ajax('/manage/user/delete', {
+  userId
+}, 'POST')
 /*
 json获取接口的函数
 */

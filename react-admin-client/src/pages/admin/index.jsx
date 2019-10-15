@@ -30,7 +30,9 @@ class Admin extends Component {
         breadcrumbs.title = item.title;
         breadcrumbs.icon = item.icon;
       } else if (item.children) {
-        const cItem = item.children.find(cItem => cItem.key === path);
+        const cItem = item.children.find(
+          cItem => path.indexOf(cItem.key) === 0
+        );
         if (cItem) {
           breadcrumbs.title = cItem.title;
           breadcrumbs.icon = cItem.icon;

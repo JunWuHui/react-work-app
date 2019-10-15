@@ -50,7 +50,7 @@ export default class Category extends Component {
         parentName: category.name
       },
       () => {
-        console.log(this.state.parentId);
+        //console.log(this.state.parentId);
         this.getCategorys();
       }
     );

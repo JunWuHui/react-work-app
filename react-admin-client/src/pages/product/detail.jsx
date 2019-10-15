@@ -13,23 +13,27 @@ export default class ProductDetail extends Component {
   };
 
   async componentDidMount() {
+    // 得到当前商品的分类ID
     const { pCategoryId, categoryId } = this.props.location.state.product;
     if (pCategoryId === "0") {
-      //一级分类下的商品分类名
+      // 一级分类下的商品
       const result = await reqCategory(categoryId);
       const cName1 = result.data.name;
-      this.setState({
-        cName1
-      });
+      this.setState({ cName1 });
     } else {
-      // const result1 = await reqCategory(categoryId);
-      // const result2 = await reqCategory(pCategoryId);
-      //二级
-      //const cName1 = result1.data.name;
-      //const cName2 = result2.data.name;
+      // 二级分类下的商品
+      /*
+      //通过多个await方式发多个请求: 后面一个请求是在前一个请求成功返回之后才发送
+      const result1 = await reqCategory(pCategoryId) // 获取一级分类列表
+      const result2 = await reqCategory(categoryId) // 获取二级分类
+      const cName1 = result1.data.name
+      const cName2 = result2.data.name
+      */
+
+      // 一次性发送多个请求, 只有都成功了, 才正常处理
       const results = await Promise.all([
-        reqCategory(categoryId),
-        reqCategory(pCategoryId)
+        reqCategory(pCategoryId),
+        reqCategory(categoryId)
       ]);
       const cName1 = results[0].data.name;
       const cName2 = results[1].data.name;
@@ -45,7 +49,7 @@ export default class ProductDetail extends Component {
       name,
       desc,
       price,
-      //detail,
+      detail,
       imgs
     } = this.props.location.state.product;
     const { cName1, cName2 } = this.state;
@@ -101,10 +105,10 @@ export default class ProductDetail extends Component {
             <List.Item>
               <p className="title">商品详情：</p>
               <div className="text-box">
-                <p className="text">
-                  不拔干，滋润而不油腻，道很好闻
-                  ，比较好上色，包装精美，膏体质地棉柔而且颜色很饱满，雾面感超气质，滋润效果：魅可口红外壳手感很好，很自然，滋润而不油腻
-                </p>
+                <p
+                  className="text"
+                  dangerouslySetInnerHTML={{ __html: detail }}
+                ></p>
               </div>
             </List.Item>
           </List>
