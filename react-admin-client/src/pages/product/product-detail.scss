@@ -1,0 +1,57 @@
+.product-detail {
+  .ant-card-head-title {
+    text-align: left;
+  }
+
+  .ant-list-item {
+    .title {
+      width: 100px;
+      float: left;
+      margin: 0;
+      line-height: 1.5;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .desc {
+      float: left;
+      line-height: 1.5;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    .imgs {
+      float: left;
+      height: 200px;
+
+      .img-item {
+        width: 200px;
+        height: 200px;
+        background-color: #e7e7e7;
+        margin-right: 5px;
+        float: left;
+
+        img {
+          max-width: 100%;
+          max-height: 100%;
+        }
+      }
+    }
+
+    .text-box {
+      float: left;
+      text-align: left;
+      font-size: 13px;
+
+      .subtext {
+        padding-bottom: 10px;
+        margin: 0;
+        color: red;
+      }
+
+      .text {
+        margin: 0;
+      }
+    }
+  }
+}
