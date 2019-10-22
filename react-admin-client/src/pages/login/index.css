@@ -90,6 +90,27 @@
   box-sizing: border-box;
 }
 
+.login-page .login-box .right .error-msg {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+  height: 30px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 30px;
+  transform: translateY(-30px);
+  transition: all .3s;
+}
+
+.login-page .login-box .right .error-msg.show {
+  visibility: visible;
+  transform: translateY(0);
+}
+
 .login-page .login-box .right h4 {
   font-size: 16px;
   color: #f9564a;

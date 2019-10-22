@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { Avatar, Modal, Button } from "antd";
 import moment from "moment";
 import imgAvatar from "../../assets/img/touxiang1.png";
-import memoryUtils from "../../utils/memoryUtils";
-import storageUtils from "../../utils/storageUtils";
 import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { logout } from "../../redux/actions";
 import "./header.scss";
 import { rqWeather } from "../../api/index";
 
@@ -39,15 +39,13 @@ class Header extends Component {
   }
 
   loginOut = () => {
-    let _this = this;
     confirm({
       content: "您确定是否要退出登陆?",
       cancelText: "取消",
       okText: "确定",
-      onOk() {
-        storageUtils.removeUser();
-        memoryUtils.user = {};
-        _this.props.history.replace("/login");
+      onOk: () => {
+        this.props.logout();
+        this.props.history.replace("/login");
       },
       onCancel() {
         console.log("Cancel");
@@ -57,7 +55,7 @@ class Header extends Component {
 
   render() {
     const { weather, currentTime } = this.state;
-    const username = memoryUtils.user.username;
+    const username = this.props.user.username;
     return (
       <div className="header">
         <div className="header-box">
@@ -75,4 +73,7 @@ class Header extends Component {
   }
 }
 
-export default withRouter(Header);
+export default connect(
+  state => ({ user: state.user }),
+  { logout }
+)(withRouter(Header));

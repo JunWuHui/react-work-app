@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Icon, Input, Button, message } from "antd";
+
+import { connect } from "react-redux";
+import { login } from "../../redux/actions";
+
 import logoImg from "./img/logo.png";
 import bgImgOne from "./img/login-bg01.png";
 import bgImgTwo from "./img/login-bg02.png";
 
-import { reqLogin } from "../../api";
-import memoryUtils from "../../utils/memoryUtils";
-import storageUtils from "../../utils/storageUtils";
 import "./index.scss";
 
 class LoginPage extends Component {
@@ -15,31 +16,20 @@ class LoginPage extends Component {
     e.preventDefault();
     this.props.form.validateFields(async (err, values) => {
       const { username, password } = values;
-      const res = await reqLogin(username, password);
-
-      try {
-        if (res.status === 0) {
-          message.success("登陆成功!");
-          //保存user
-          const user = res.data;
-          memoryUtils.user = user;
-          storageUtils.saveUser(user);
-          //登陆成功跳转到管理页面
-          this.props.history.replace("/");
-        } else {
-          message.error(res.msg);
-        }
-      } catch (error) {
-        alert("请求出错了" + error.message);
+      if (!err) {
+        // 调用分发异步action的函数 => 发登陆的异步请求, 有了结果后更新状态
+        this.props.login(username, password);
+      } else {
+        message.error("检测失败！");
       }
     });
   };
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const user = memoryUtils.user;
+    let user = this.props.user;
     if (user && user._id) {
-      return <Redirect to="/" />;
+      return <Redirect to="/home" />;
     }
     return (
       <div className="login-page">
@@ -55,6 +45,9 @@ class LoginPage extends Component {
             <img src={bgImgTwo} alt="login" />
           </div>
           <div className="right">
+            <div className={user.errorMsg ? "error-msg show" : "error-msg"}>
+              {user.errorMsg}
+            </div>
             <img className="logo" src={logoImg} alt="logo" />
             <div className="login-mod">
               <Form onSubmit={this.handleSubmit} className="login-form">
@@ -113,4 +106,8 @@ class LoginPage extends Component {
   }
 }
 
-export default Form.create({ name: "horizontal_login" })(LoginPage);
+const WrapLogin = Form.create()(LoginPage);
+export default connect(
+  state => ({ user: state.user }),
+  { login }
+)(WrapLogin);

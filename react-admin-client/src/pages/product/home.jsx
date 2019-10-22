@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Table, Card, Button, Icon, Select, Input, message } from "antd";
+import memoryUtils from "../../utils/memoryUtils";
 import {
   reqProducts,
   reqSearchProducts,
@@ -104,7 +105,7 @@ export default class ProductHome extends Component {
         key: "action",
         render: product => (
           <span>
-            <Button
+            {/* <Button
               type="link"
               onClick={() => {
                 this.props.history.push("/product/detail", { product });
@@ -119,6 +120,23 @@ export default class ProductHome extends Component {
               }}
             >
               修改
+            </Button> */}
+            {/* HashRouter无效数据解决方式 */}
+            <Button
+              type="link"
+              onClick={() => {
+                this.showDetail(product);
+              }}
+            >
+              详情
+            </Button>
+            <Button
+              type="link"
+              onClick={() => {
+                this.showUpdate(product);
+              }}
+            >
+              修改
             </Button>
           </span>
         )
@@ -129,6 +147,24 @@ export default class ProductHome extends Component {
   componentWillMount() {
     this.initCloums();
   }
+
+  /*
+  显示商品详情界面(解决哈希路由不能获取的数据问题)
+   */
+  showDetail = procut => {
+    // 缓存product对象 ==> 给detail组件使用
+    memoryUtils.product = procut;
+    this.props.history.push("/product/detail");
+  };
+
+  /*
+  显示修改商品界面(解决哈希路由不能获取的数据问题)
+   */
+  showUpdate = procut => {
+    // 缓存product对象 ==> 给detail组件使用
+    memoryUtils.product = procut;
+    this.props.history.push("/product/addupdate");
+  };
 
   render() {
     const { products, loading, total, searchName, searchType } = this.state;

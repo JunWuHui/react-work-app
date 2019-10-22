@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { Menu, Icon } from "antd";
 import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 import Login from "../../assets/img/logo.png";
 import "./left-nav.scss";
 import menuList from "../../config/menuConfig";
-import memoryUtils from "../../utils/memoryUtils";
+import { setHeadTitle } from "../../redux/actions";
 
 const { SubMenu } = Menu;
 
@@ -15,8 +16,8 @@ class leftNav extends Component {
   hasAuth = item => {
     const { key, isPublic } = item;
 
-    const menus = memoryUtils.user.role.menus;
-    const username = memoryUtils.user.username;
+    const menus = this.props.user.role.menus;
+    const username = this.props.user.username;
     /*
     1. 如果当前用户是admin
     2. 如果当前item是公开的
@@ -45,9 +46,19 @@ class leftNav extends Component {
       if (this.hasAuth(item)) {
         // 向pre添加<Menu.Item>
         if (!item.children) {
+          if (item.key === path || path.indexOf(item.key) === 0) {
+            // 更新redux中的headerTitle状态
+            this.props.setHeadTitle(item.title);
+          }
+
           pre.push(
             <Menu.Item key={item.key}>
-              <Link to={item.key}>
+              <Link
+                to={item.key}
+                onClick={() => {
+                  this.props.setHeadTitle(item.title);
+                }}
+              >
                 <Icon type={item.icon} />
                 <span>{item.title}</span>
               </Link>
@@ -117,4 +128,7 @@ class leftNav extends Component {
   }
 }
 
-export default withRouter(leftNav);
+export default connect(
+  state => ({ user: state.user }),
+  { setHeadTitle }
+)(withRouter(leftNav));

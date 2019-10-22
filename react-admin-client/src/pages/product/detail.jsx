@@ -3,6 +3,7 @@ import { Card, Icon, Button, List } from "antd";
 
 import { BASE_IMG_URL } from "../../utils/contants";
 import { reqCategory } from "../../api";
+import memoryUtils from "../../utils/memoryUtils";
 
 import "./product-detail.scss";
 
@@ -13,8 +14,9 @@ export default class ProductDetail extends Component {
   };
 
   async componentDidMount() {
+    console.log(memoryUtils.product);
     // 得到当前商品的分类ID
-    const { pCategoryId, categoryId } = this.props.location.state.product;
+    const { pCategoryId, categoryId } = memoryUtils.product;
     if (pCategoryId === "0") {
       // 一级分类下的商品
       const result = await reqCategory(categoryId);
@@ -44,14 +46,15 @@ export default class ProductDetail extends Component {
     }
   }
 
+  /*
+  在卸载之前清除保存的数据
+  */
+  componentWillUnmount() {
+    memoryUtils.product = {};
+  }
+
   render() {
-    const {
-      name,
-      desc,
-      price,
-      detail,
-      imgs
-    } = this.props.location.state.product;
+    const { name, desc, price, detail, imgs } = memoryUtils.product;
     const { cName1, cName2 } = this.state;
     const title = (
       <span>
@@ -96,7 +99,7 @@ export default class ProductDetail extends Component {
                 {imgs.map(img => {
                   return (
                     <div className="img-item" key={img}>
-                      <img src={BASE_IMG_URL + img} alt={img} />>
+                      <img src={BASE_IMG_URL + img} alt={img} />
                     </div>
                   );
                 })}

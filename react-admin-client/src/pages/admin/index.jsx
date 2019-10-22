@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Icon } from "antd";
+import { Layout, Breadcrumb } from "antd";
+import { connect } from "react-redux";
 import { Route, Switch, Redirect, withRouter } from "react-router-dom";
 import "./admin.scss";
 
@@ -12,10 +13,10 @@ import Bar from "../charts/bar";
 import Line from "../charts/line";
 import Pie from "../charts/pie";
 
-import memoryUtils from "../../utils/memoryUtils";
 import LeftNav from "../../components/left-nav";
 import Headers from "../../components/header";
 import menuList from "../../config/menuConfig";
+import NotFound from "../not-found/not-found";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -43,9 +44,9 @@ class Admin extends Component {
   };
 
   render() {
-    const user = memoryUtils.user;
-    const { title, icon } = this.getTitle();
-    //console.log(title);
+    const user = this.props.user;
+    //const { icon } = this.getTitle();
+    const title = this.props.headTitle;
     this.getTitle();
     if (!user || !user._id) {
       return <Redirect to="/login" />;
@@ -68,7 +69,7 @@ class Admin extends Component {
           </Header>
           <Breadcrumb className="breadcrumb">
             <Breadcrumb.Item href="">
-              <Icon type={icon || "home"} />
+              {/* <Icon type={icon || "home"} /> */}
               <span>{title}</span>
             </Breadcrumb.Item>
           </Breadcrumb>
@@ -77,7 +78,7 @@ class Admin extends Component {
               style={{ padding: 24, background: "#fff", textAlign: "center" }}
             >
               <Switch>
-                <Redirect from="/" exact to="/home" />
+                <Redirect exact from="/" to="/home" />
                 <Route path="/home" component={Home} />
                 <Route path="/category" component={Category} />
                 <Route path="/product" component={Product} />
@@ -86,6 +87,7 @@ class Admin extends Component {
                 <Route path="/charts/bar" component={Bar} />
                 <Route path="/charts/line" component={Line} />
                 <Route path="/charts/pie" component={Pie} />
+                <Route component={NotFound} /> {/*上面没有一个匹配, 直接显示*/}
               </Switch>
             </div>
           </Content>
@@ -98,4 +100,7 @@ class Admin extends Component {
   }
 }
 
-export default withRouter(Admin);
+export default connect(
+  state => ({ headTitle: state.headTitle, user: state.user }),
+  {}
+)(withRouter(Admin));

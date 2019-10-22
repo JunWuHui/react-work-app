@@ -3,6 +3,7 @@ import { Form, Card, Input, Icon, Button, Cascader, message } from "antd";
 import { reqCategorys, reqAddOrUpdateProduct } from "../../api";
 import PicturesWall from "./pctures-wall";
 import RichTextEditor from "./rich-text-editor";
+import memoryUtils from "../../utils/memoryUtils";
 
 import "./product-add-update.scss";
 
@@ -169,11 +170,18 @@ class ProductAddUpdate extends Component {
 
   componentWillMount() {
     //取出携带的state
-    const product = this.props.location.state; //如果是添加没值   否则有值
+    const product = memoryUtils.product; //如果是添加没值   否则有值
     //保存是否是更新标识
-    this.isUpdate = !!product;
+    this.isUpdate = !!product._id;
     this.product = product || {};
     //console.log(product);
+  }
+
+  /*
+  在卸载之前清除保存的数据
+  */
+  componentWillUnmount() {
+    memoryUtils.product = {};
   }
 
   render() {
